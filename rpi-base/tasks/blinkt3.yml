@@ -1,0 +1,17 @@
+#!/usr/bin/env ansible-playbook
+---
+# install python3 blinkt and psutil for some monitoring features
+- name: Install python3 Blinkt
+  apt:
+    name:
+      - python3-psutil 
+      - python3-blinkt
+    state: latest
+  become: yes
+
+- name: Clone full blinkt repo to home directory
+  git:
+    repo: https://github.com/pimoroni/blinkt.git
+    dest: /home/pi/blinkt
+    clone: yes
+    update: yes

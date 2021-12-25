@@ -1,0 +1,46 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: basic setup
+  hosts: raspios
+  become: yes
+
+  vars_files:
+    - defaults/main.yml
+    - defaults/secrets.yml
+
+  vars:
+    # remove python ansible warning
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  roles:
+    - { role: dockerswarm }
+
+  tasks:
+
+  - name: Update and upgrade apt packages
+    become: true
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+
+  - name: Run rpi-config playbook (basic settings)
+    include: tasks/rpi-config.yml
+
+  - include: tasks/disable-hdmi.yml
+    when: disable_hdmi
+
+  - include: tasks/samba.yml
+    when: install_samba
+
+  - name: Run basic python3 playbook (basic settings)
+    include: tasks/basic-python.yml
+
+  # set hostnames based on inventory short name
+  - include: tasks/hostnames.yml
+
+  - include: tasks/docker.yml
+    when: install_docker
+
+  - include: tasks/blinkt3.yml
+    when: install_blinkt

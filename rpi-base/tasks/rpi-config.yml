@@ -1,0 +1,18 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: setup wifi
+  become: true
+  template: >
+    src=templates/wpa_supplicant_rvalley.conf 
+    dest=/etc/wpa_supplicant/wpa_supplicant.conf
+
+- name: Install basic packages
+  apt:
+    name: "{{ basic_packages }}"
+    state: latest
+
+- name: Deploy SSH-Key to remote host
+  authorized_key:
+    user: pi
+    key: "{{ssh_key}}"
+    exclusive: true

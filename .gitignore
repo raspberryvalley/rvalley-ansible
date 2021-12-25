@@ -1,0 +1,5 @@
+# hide secrets from repository
+secrets.yml
+
+# ansible .gitignore
+*.retry

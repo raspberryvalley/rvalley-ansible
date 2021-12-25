@@ -1,0 +1,13 @@
+[raspios]
+rvalley01 ansible_ssh_host=192.168.1.100 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false
+rvalley02 ansible_ssh_host=192.168.1.101 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false
+rvalley03 ansible_ssh_host=192.168.1.102 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false
+rvalley04 ansible_ssh_host=192.168.1.103 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false
+
+[docker_swarm_manager]
+rvalley01
+rvalley02
+rvalley03
+
+[docker_swarm_worker]
+rvalley04

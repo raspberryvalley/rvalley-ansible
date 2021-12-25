@@ -1,0 +1,18 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: install samba packages
+  become: true
+  apt:
+    # update_cache: yes
+    name:
+      - samba
+      - samba-common-bin
+    state: latest
+
+- name: Install samba configuration file
+  become: true
+  template: >
+    src=templates/smb.conf
+    dest=/etc/samba/smb.conf
+
+# TODO: set samba password

@@ -1,0 +1,65 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: get docker convenience script
+  shell: curl -fsSL https://get.docker.com -o get-docker.sh
+  args:
+    creates: /home/pi/get-docker.sh
+
+- name: install docker
+  shell: sh /home/pi/get-docker.sh
+  args:
+    creates: /usr/bin/docker
+
+# - name: make pi user execute docker commands
+#   shell: usermod -aG docker pi
+
+- name: add the pi user to the docker group
+  user:
+    name: pi
+    groups: docker
+    append: yes
+
+# TODO: warn when python3 is not installed
+
+# - debug:
+#   msg: docker-compose will not be installed (python3 was not installed)
+#   when: install_python3 == false
+
+- name: install docker-compose
+  shell: pip3 -v install docker-compose
+  args:
+    creates: /usr/local/bin/docker-compose
+
+# TODO provide image list
+- name: Pull rpi mosquitto image
+  community.docker.docker_image:
+    name: raspberryvalley/mosquitto:rpi
+    source: pull
+
+- name: Pull rpi nodered image
+  community.docker.docker_image:
+    name: raspberryvalley/nodered:rpi
+    source: pull
+
+- name: Create rpi mosquitto container
+  community.docker.docker_container:
+    name: mosq
+    image: raspberryvalley/mosquitto:rpi
+    container_default_behavior: no_defaults
+    state: started
+    restart_policy: always
+    recreate: no
+    ports:
+      - 1883:1883
+      - 9001:9001
+
+- name: Create rpi nodered container
+  community.docker.docker_container:
+    name: nred
+    image: raspberryvalley/nodered:rpi
+    container_default_behavior: no_defaults
+    state: started
+    restart_policy: always
+    recreate: no
+    ports:
+      - 1880:1880

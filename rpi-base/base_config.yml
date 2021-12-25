@@ -1,0 +1,16 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: basic setup
+  hosts: raspios
+  become: yes
+
+  vars_files:
+    - defaults/main.yml
+    - defaults/secrets.yml
+
+  vars:
+    # remove python ansible warning
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  roles:
+    - { role: rpiconfig }

@@ -1,0 +1,107 @@
+#!/usr/bin/env ansible-playbook
+---
+
+# raspi-config nonint configurations
+
+- name: Set the WIFI country
+  become: yes
+  # command: iw reg set SE
+  command: raspi-config nonint do_wifi_country {{ rpi_wifi_country }}
+
+- name: Disable serial
+  become: yes
+  command: "raspi-config nonint do_serial {{ rpi_disable_serial }}"
+
+- name: Disable I2C
+  become: yes
+  command: "raspi-config nonint do_i2c {{ rpi_disable_i2c }}"
+
+- name: Disable SPI
+  become: yes
+  command: "raspi-config nonint do_spi {{ rpi_disable_spi }}"
+
+- name: Disable Camera
+  become: yes
+  command: "raspi-config nonint do_camera {{ rpi_disable_camera }}"
+
+- name: Disable OneWire
+  become: yes
+  command: "raspi-config nonint do_onewire {{ rpi_disable_onewire }}"
+
+- name: Disable Remote GPIO
+  become: yes
+  command: "raspi-config nonint do_rgpio {{ rpi_disable_remote_gpio }}"
+
+# other commands
+
+- name: Set the timezone
+  become: yes
+  command: timedatectl set-timezone {{ rpi_timezone }}
+
+# included playbooks
+
+- include: gpu-mem-split.yml
+  when: rpi_gpu_mem is defined
+
+- include: disable-hdmi.yml
+  when: disable_hdmi
+
+- include: disable-ipv6.yml
+  when: disable_ipv6_interfaces is defined
+
+
+# - name: basic setup
+#   hosts: raspios
+#   become: yes
+
+#   vars_files:
+#     - defaults/main.yml
+#     - defaults/secrets.yml
+
+  # vars:
+  #   # remove python ansible warning
+  #   ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  # playbook setup of pyenv
+  # roles:
+  # - role: dylannninin.pyenv
+  #   pyenv_versions:
+  #     - 2.7.18
+  #     - 3.10.0
+  #     - 3.9.9
+  #     - 3.8.12
+  #     - 3.7.12
+  #     - 3.6.15
+  #   pyenv_global_version: 3.10.0
+
+  # tasks:
+
+  # - name: Update and upgrade apt packages
+  #   become: true
+  #   apt:
+  #     upgrade: yes
+  #     update_cache: yes
+  #     cache_valid_time: 86400 #One day
+
+  # - include: tasks/samba.yml
+  #   when: install_samba
+
+  # - name: Run basic python3 playbook (basic settings)
+  #   include: tasks/basic-python.yml
+  #   when: install_python3
+
+  # - name: Install Mosquitto (basic)
+  #   include: tasks/mosquitto.yml
+  #   when: install_mosquitto
+
+  # set hostnames based on inventory short name
+  # - include: tasks/hostnames.yml
+
+  # - include: tasks/docker.yml
+  #   when: install_docker
+
+  # - include: tasks/blinkt3.yml
+  #   when: install_blinkt
+
+  # - include: tasks/nodered.yml
+  #   when: install_nodered

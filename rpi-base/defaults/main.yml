@@ -1,0 +1,45 @@
+---
+# basic configuration of Raspberry Pi OS. Covers many of raspi-config settings.
+# ------------------------
+
+# locale description
+# raspberry_pi_locale: "en_GB.UTF-8"
+
+# raspberry_pi_keyboard_layout: "us"
+# raspberry_pi_configure_network: false
+# raspberry_pi_use_wifi: false
+
+# package lists to install
+# ------------------------
+
+basic_packages:
+  - curl
+  - git
+
+# configuration and enabling of basic software
+# ------------------------
+
+# samba setings
+install_samba: true
+samba_workgroup: MATRIX
+
+# install mosquitto mqtt broker
+install_mosquitto: false
+
+# install node-RED
+install_nodered: true
+
+# docker settings
+install_docker: true
+
+# additional hardware support
+# ------------------------
+
+# install blinkt
+install_blinkt: true
+
+# work in progress
+# ------------------------
+
+# RAM size for log2ram folder in megabytes
+log2ram_size: '20'

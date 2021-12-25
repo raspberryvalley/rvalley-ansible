@@ -1,0 +1,14 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Install basic python 3 packages
+  apt:
+    name: "{{ python3_packages }}"
+    state: latest
+
+- name: Install python libraries
+  pip:
+    name:
+      - dataclasses_json
+      - asyncio-mqtt
+      - barnum
+      - pylint

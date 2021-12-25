@@ -1,0 +1,37 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Install packages for nodered
+  apt:
+    name:
+      - curl
+      - build-essential
+    state: latest
+  become: yes
+
+- name: install node (ARM package)
+  apt:
+    name:
+      - nodejs
+      - npm
+
+- name: install nodered
+  apt:
+    name:
+      - nodered
+
+- name: enable nodered service
+  service:
+    name: nodered
+    enabled: yes
+
+# - name: install node-RED nodes
+#   npm: name={{ item }} global=no state=present
+#   with_items:
+#     - node-red-dashboard
+
+- name: install node-RED nodes
+  npm: 
+    name: node-red-dashboard
+    global: no
+    state: latest
+    path: /home/pi/.node-red/node_modules

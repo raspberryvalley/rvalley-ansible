@@ -1,0 +1,18 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: just poweroff
+  hosts: raspios
+  become: yes
+
+  vars_files:
+    - defaults/main.yml
+
+  vars:
+    # remove python ansible warning
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  tasks:
+
+  - name: poweroff all
+    become: yes
+    command: "poweroff"

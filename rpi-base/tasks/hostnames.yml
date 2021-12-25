@@ -1,0 +1,8 @@
+#!/usr/bin/env ansible-playbook
+---
+# - debug:
+#     msg: inventory_hostname_short = {{ inventory_hostname_short }}
+
+- name: Set hostname via noninteractive raspi-config
+  become: yes
+  command: "raspi-config nonint do_hostname {{inventory_hostname_short}}"

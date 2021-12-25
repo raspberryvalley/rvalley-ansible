@@ -1,0 +1,9 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Install mosquitto broker and clients
+  become: true
+  apt:
+    name:
+      - mosquitto
+      - mosquitto-clients
+    state: latest
