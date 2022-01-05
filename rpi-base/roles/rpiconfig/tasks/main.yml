@@ -76,23 +76,8 @@
 
   # tasks:
 
-  # - name: Update and upgrade apt packages
-  #   become: true
-  #   apt:
-  #     upgrade: yes
-  #     update_cache: yes
-  #     cache_valid_time: 86400 #One day
-
   # - include: tasks/samba.yml
   #   when: install_samba
-
-  # - name: Run basic python3 playbook (basic settings)
-  #   include: tasks/basic-python.yml
-  #   when: install_python3
-
-  # - name: Install Mosquitto (basic)
-  #   include: tasks/mosquitto.yml
-  #   when: install_mosquitto
 
   # set hostnames based on inventory short name
   # - include: tasks/hostnames.yml

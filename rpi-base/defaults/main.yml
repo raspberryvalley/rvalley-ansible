@@ -15,6 +15,7 @@
 basic_packages:
   - curl
   - git
+  - mosquitto-clients
 
 # configuration and enabling of basic software
 # ------------------------

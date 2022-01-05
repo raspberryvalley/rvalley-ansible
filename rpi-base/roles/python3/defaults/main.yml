@@ -9,4 +9,3 @@ install_python3: true
 python3_packages:
   - python3
   - python3-pip
-  - paho-mqtt

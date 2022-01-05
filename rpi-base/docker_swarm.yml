@@ -12,35 +12,28 @@
     # remove python ansible warning
     ansible_python_interpreter: "{{ ansible_playbook_python }}"
 
+  pre_tasks:
+  - name: Pull rpi visualizer image
+    community.docker.docker_image:
+      name: alexellis2/visualizer-arm:latest
+      source: pull
+
   roles:
     - { role: dockerswarm }
 
-  tasks:
-
-  - name: Update and upgrade apt packages
-    become: true
-    apt:
-      upgrade: yes
-      update_cache: yes
-      cache_valid_time: 86400 #One day
-
-  - name: Run rpi-config playbook (basic settings)
-    include: tasks/rpi-config.yml
-
-  - include: tasks/disable-hdmi.yml
-    when: disable_hdmi
-
-  - include: tasks/samba.yml
-    when: install_samba
-
-  - name: Run basic python3 playbook (basic settings)
-    include: tasks/basic-python.yml
-
-  # set hostnames based on inventory short name
-  - include: tasks/hostnames.yml
-
-  - include: tasks/docker.yml
-    when: install_docker
-
-  - include: tasks/blinkt3.yml
-    when: install_blinkt
+  # tasks:
+  # - name: Run rpi visualizer service
+  #   docker_swarm_service:
+  #     name: viz
+  #     image: alexellis2/visualizer-arm:latest
+  #     constraints:
+  #       - node.role == manager
+  #     mounts:
+  #       - source: /var/run/docker.sock
+  #         target: /var/run/docker.sock
+  #         type: bind
+  #     publish:
+  #       - published_port: 8080
+  #         target_port: 8080
+  #         protocol: tcp
+  #         mode: host

@@ -12,3 +12,4 @@
       - asyncio-mqtt
       - barnum
       - pylint
+      - paho-mqtt

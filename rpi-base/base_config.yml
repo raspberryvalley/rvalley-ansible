@@ -8,9 +8,42 @@
     - defaults/main.yml
     - defaults/secrets.yml
 
+  pre_tasks:
+  - name: Deploy SSH-Key to remote host
+    authorized_key:
+      user: pi
+      key: "{{ssh_key}}"
+      exclusive: true
+
+  - name: Update and upgrade apt packages
+    become: true
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+
+  - name: Install basic packages
+    apt:
+      name: "{{ basic_packages }}"
+      state: latest
+
   vars:
     # remove python ansible warning
     ansible_python_interpreter: "{{ ansible_playbook_python }}"
 
   roles:
     - { role: rpiconfig }
+    - { role: python3 }
+
+  tasks:
+  - include: tasks/samba.yml
+    when: install_samba
+
+  # set hostnames based on inventory short name
+  - include: tasks/hostnames.yml
+
+  - include: tasks/docker.yml
+    when: install_docker
+
+  - include: tasks/blinkt3.yml
+    when: install_blinkt
