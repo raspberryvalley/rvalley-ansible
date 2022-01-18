@@ -38,7 +38,7 @@
 
 - name: Pull rpi nodered image
   community.docker.docker_image:
-    name: raspberryvalley/nodered:rpi
+    name: raspberryvalley/nodered-python:1.0.0
     source: pull
 
 - name: Create rpi mosquitto container
@@ -56,7 +56,7 @@
 - name: Create rpi nodered container
   community.docker.docker_container:
     name: nred
-    image: raspberryvalley/nodered:rpi
+    image: raspberryvalley/nodered-python:1.0.0
     container_default_behavior: no_defaults
     state: started
     restart_policy: always
