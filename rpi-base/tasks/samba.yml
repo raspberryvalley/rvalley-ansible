@@ -15,4 +15,27 @@
     src=templates/smb.conf
     dest=/etc/samba/smb.conf
 
-# TODO: set samba password
+# users must exist before creating samba users
+- name: shell - create samba users
+  shell: >
+    (pdbedit --user={{ item.username }} 2>&1 > /dev/null)
+    || (echo '{{ item.password }}'; echo '{{ item.password }}')
+    | smbpasswd -s -a {{ item.username }}
+  register: create_samba_users
+  changed_when: "'Added user' in create_samba_users.stdout"
+  become: true
+  with_items: "{{ samba_users }}"
+  loop_control:
+    label: "{{ item.username }}"
+
+- name: shell - set samba passwords
+  shell: >
+    (smbclient -U {{ item.username }}%{{ item.password }} -L 127.0.0.1 2>&1 > /dev/null)
+    || (echo '{{ item.password }}'; echo '{{ item.password }}')
+    | smbpasswd {{ item.username }}
+  register: verify_samba_users
+  changed_when: "'New SMB password' in verify_samba_users.stdout"
+  become: true
+  with_items: "{{ samba_users }}"
+  loop_control:
+    label: "{{ item.username }}"
